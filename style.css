@@ -36,6 +36,23 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+html[lang="ar"] body {
+  direction: rtl;
+  font-family: "IBM Plex Sans Arabic", "Tahoma", sans-serif;
+}
+
+html[lang="ar"] .en:not(.keep-en) {
+  font-family: "IBM Plex Sans Arabic", "Tahoma", sans-serif;
+}
+
+html[lang="ar"] .provider-copy,
+html[lang="ar"] .provider-name,
+html[lang="ar"] .source-item a {
+  direction: ltr;
+  text-align: left;
+  font-family: "Poppins", Arial, sans-serif;
+}
+
 a {
   color: inherit;
 }
@@ -62,6 +79,32 @@ button {
   pointer-events: none;
   opacity: 0.024;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cpath d='M40 0 L80 40 L40 80 L0 40Z' fill='none' stroke='%23041026' stroke-width='1'/%3E%3Cpath d='M40 20 L60 40 L40 60 L20 40Z' fill='none' stroke='%23041026' stroke-width='0.5'/%3E%3C/svg%3E");
+}
+
+.language-toggle {
+  position: fixed;
+  top: 18px;
+  left: 22px;
+  z-index: 80;
+  min-width: 44px;
+  height: 34px;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.86);
+  color: var(--navy-deep);
+  font-family: "Poppins", Arial, sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.10em;
+  text-transform: uppercase;
+  box-shadow: 0 10px 28px rgba(4, 16, 38, 0.08);
+  transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease;
+}
+
+.language-toggle:hover {
+  background: var(--navy-deep);
+  color: #ffffff;
+  transform: translateY(-1px);
 }
 
 .page-wrapper {
@@ -565,6 +608,11 @@ th {
   padding: 14px 16px;
   border-bottom: 1px solid var(--border);
   vertical-align: top;
+}
+
+html[lang="ar"] th,
+html[lang="ar"] th button {
+  text-align: right;
 }
 
 td {

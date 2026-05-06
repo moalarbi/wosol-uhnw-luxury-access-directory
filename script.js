@@ -2210,6 +2210,8 @@ let activeFilter = "All";
 let searchTerm = "";
 let sortKey = "name";
 let sortDirection = 1;
+let currentLanguage = localStorage.getItem("wosolLanguage") === "ar" ? "ar" : "en";
+let activeCompanySlug = null;
 
 const companyGrid = document.getElementById("companyGrid");
 const comparisonBody = document.getElementById("comparisonBody");
@@ -2220,6 +2222,308 @@ const searchInput = document.getElementById("searchInput");
 const modal = document.getElementById("companyModal");
 const modalContent = document.getElementById("modalContent");
 const backToTop = document.getElementById("backToTop");
+const languageToggle = document.getElementById("languageToggle");
+
+const uiText = {
+  en: {
+    pageTitle: "Global UHNW Luxury Access Directory | WOSOL Concierge",
+    pageDescription: "A premium WOSOL research hub mapping global UHNW luxury access providers across private aviation, superyachts, concierge, bespoke travel, private clubs, and GCC services.",
+    switchLanguage: "Switch to Arabic",
+    resultCount: (visible, total) => `Showing ${visible} of ${total} companies`,
+    emptyState: "No companies match the current filter. Clear the search or choose All.",
+    searchPlaceholder: "Search NetJets, yacht charter, Saudi, family office...",
+    services: "Services",
+    target: "Target",
+    relevance: "WOSOL relevance",
+    website: "Website",
+    viewDetails: "View Details",
+    open: "Open",
+    close: "Close",
+    top: "Top",
+    region: "Region",
+    serviceType: "Service Type",
+    targetSegment: "Target Segment",
+    membershipAccess: "Membership / Access",
+    executiveSummary: "Executive Summary",
+    publicServices: "Public Services Listed",
+    relevantToWosol: "What makes it relevant to WOSOL",
+    strategicLesson: "Strategic lesson for WOSOL",
+    sourceLink: "Source Link",
+    visitWebsite: "Visit Website",
+    copyCompanyLink: "Copy Company Link",
+    copied: "Copied"
+  },
+  ar: {
+    pageTitle: "دليل الوصول الفاخر لعملاء UHNW | WOSOL Concierge",
+    pageDescription: "مرجع بحثي تنفيذي من WOSOL يرصد مزودي خدمات الوصول الفاخر عالميًا في الطيران الخاص، اليخوت، الكونسيرج، السفر المصمم، النوادي الخاصة، والخدمات المرتبطة بالسعودية والخليج.",
+    switchLanguage: "Switch to English",
+    resultCount: (visible, total) => `عرض ${visible} من أصل ${total} شركة`,
+    emptyState: "لا توجد شركات مطابقة للبحث الحالي. امسح البحث أو اختر الكل.",
+    searchPlaceholder: "ابحث باسم الشركة أو الخدمة أو السوق، مثل NetJets أو yacht charter أو Saudi...",
+    services: "الخدمات",
+    target: "الشريحة المستهدفة",
+    relevance: "صلة النموذج بـ WOSOL",
+    website: "الموقع",
+    viewDetails: "عرض التفاصيل",
+    open: "فتح",
+    close: "إغلاق",
+    top: "أعلى",
+    region: "النطاق الجغرافي",
+    serviceType: "نوع الخدمة",
+    targetSegment: "الشريحة المستهدفة",
+    membershipAccess: "نموذج العضوية والوصول",
+    executiveSummary: "ملخص تنفيذي",
+    publicServices: "الخدمات المعلنة",
+    relevantToWosol: "لماذا يهم WOSOL",
+    strategicLesson: "الدرس الاستراتيجي لـ WOSOL",
+    sourceLink: "رابط المصدر",
+    visitWebsite: "زيارة الموقع",
+    copyCompanyLink: "نسخ رابط الشركة",
+    copied: "تم النسخ"
+  }
+};
+
+const categoryLabelsAr = {
+  "All": "الكل",
+  "Private Jets": "الطيران الخاص",
+  "Private Yachts": "اليخوت الخاصة",
+  "Luxury Concierge": "الكونسيرج الفاخر",
+  "Bespoke Travel": "السفر المصمم",
+  "Private Clubs": "النوادي الخاصة",
+  "GCC / Saudi Relevant": "مرتبط بالسعودية والخليج"
+};
+
+const staticArabic = {
+  "Internal Research Hub - Confidential - 2026": "مرجع بحثي داخلي - سري - 2026",
+  "Directory": "الدليل",
+  "Comparison": "المقارنة",
+  "Patterns": "الأنماط",
+  "WOSOL Insights": "رؤى WOSOL",
+  "Sources": "المصادر",
+  "UHNW Access Research Layer": "طبقة بحث الوصول الفاخر",
+  "Global UHNW Luxury Access Directory": "دليل الوصول الفاخر لعملاء UHNW عالميًا",
+  "A strategic research hub for private aviation, superyachts, luxury concierge, and bespoke lifestyle services.": "مرجع استراتيجي لفهم الطيران الخاص، اليخوت الفاخرة، الكونسيرج، وتجارب الحياة المصممة لعملاء الثروات العالية جدًا.",
+  "Private Aviation": "الطيران الخاص",
+  "Superyachts": "اليخوت الفاخرة",
+  "Lifestyle Management": "إدارة أسلوب الحياة",
+  "Bespoke Travel": "السفر المصمم",
+  "UHNW Access": "وصول UHNW",
+  "Explore Companies": "استعراض الشركات",
+  "View by Category": "عرض حسب التصنيف",
+  "WOSOL Strategic Insights": "رؤى WOSOL الاستراتيجية",
+  "Executive Summary": "ملخص تنفيذي",
+  "Companies Mapped": "شركة مرصودة",
+  "Research Categories": "تصنيفات بحثية",
+  "Saudi-Relevant Layer": "طبقة مرتبطة بالسعودية",
+  "Sources Only": "مصادر عامة فقط",
+  "Company Directory": "دليل الشركات",
+  "Filterable research cards": "بطاقات بحث قابلة للتصفية",
+  "Search by company, service, region, or WOSOL relevance": "ابحث حسب الشركة أو الخدمة أو السوق أو صلة النموذج بـ WOSOL",
+  "Clear": "مسح",
+  "All": "الكل",
+  "Private Jets": "الطيران الخاص",
+  "Private Yachts": "اليخوت الخاصة",
+  "Luxury Concierge": "الكونسيرج الفاخر",
+  "Private Clubs": "النوادي الخاصة",
+  "GCC / Saudi Relevant": "مرتبط بالسعودية والخليج",
+  "Comparison Table": "جدول المقارنة",
+  "Sortable provider intelligence": "قراءة مقارنة قابلة للفرز",
+  "Click a column heading to sort. Use the filters above to narrow the company cards; the comparison table remains a full reference layer.": "يمكن فرز الجدول من عناوين الأعمدة. استخدم الفلاتر لتضييق بطاقات الشركات، بينما يبقى جدول المقارنة مرجعًا كاملًا.",
+  "Company": "الشركة",
+  "Category": "التصنيف",
+  "Region": "النطاق",
+  "Service Type": "نوع الخدمة",
+  "Membership / Access Model": "نموذج العضوية والوصول",
+  "Target Segment": "الشريحة المستهدفة",
+  "WOSOL Relevance": "صلة النموذج بـ WOSOL",
+  "Website": "الموقع",
+  "Strategic Patterns": "الأنماط الاستراتيجية",
+  "Signals across global luxury access providers": "إشارات متكررة لدى مزودي الوصول الفاخر عالميًا",
+  "Pattern 01": "النمط 01",
+  "Invitation-Only Positioning": "تموضع قائم على الدعوة فقط",
+  "The highest-tier providers, including Knightsbridge Circle, CORE Club, and R360, never publish how to join. The mystery of access is itself a product.": "العلامات الأعلى مستوى مثل Knightsbridge Circle و CORE Club و R360 لا تشرح الانضمام علنًا. الغموض هنا ليس نقصًا في المعلومات، بل جزء من قيمة الوصول نفسه.",
+  "Pattern 02": "النمط 02",
+  "Membership Over Booking": "العضوية قبل الحجز",
+  "VistaJet, Wheels Up, and Ten Lifestyle all repackage service delivery into membership language. Member implies relationship; customer implies transaction.": "VistaJet و Wheels Up و Ten Lifestyle يعيدون تقديم الخدمة بلغة العضوية. كلمة عضو تصنع علاقة طويلة، بينما كلمة عميل توحي بتعامل منفصل.",
+  "Pattern 03": "النمط 03",
+  "Dedicated Advisors": "مستشارون مخصصون",
+  "Every major concierge brand centers its offer around a dedicated human: Quintessentially's Lifestyle Manager, VistaJet's Private Office, and NetJets' Account Manager.": "كل علامة كونسيرج قوية تتمحور حول شخص مخصص: Lifestyle Manager لدى Quintessentially، و Private Office لدى VistaJet، و Account Manager لدى NetJets.",
+  "Pattern 04": "النمط 04",
+  "Aviation & Yachts as Infrastructure": "الطيران واليخوت كبنية تشغيلية",
+  "Private aviation and superyachts are not services. They are infrastructure. The best brands treat them as utilities for UHNW lifestyles, not aspirational bookings.": "الطيران الخاص واليخوت ليست خدمات ترفيهية فقط، بل بنية تشغيلية لنمط حياة UHNW. العلامات الأفضل تتعامل معها كأدوات جاهزية لا كحجوزات استعراضية.",
+  "Pattern 05": "النمط 05",
+  "Discretion Language": "لغة الخصوصية والتحفظ",
+  "Discreet, private, confidential, and zero-footprint vocabulary signals trust. Brands that lead with discretion capture UHNW clients others cannot reach.": "مفردات مثل discreet و private و confidential و zero-footprint تبني الثقة. العلامات التي تقود بالخصوصية تصل إلى عملاء لا تصل إليهم المنصات العامة.",
+  "Pattern 06": "النمط 06",
+  "Access Instead of Booking": "الوصول بدل الحجز",
+  "Access implies curated, relationship-based delivery. Booking implies a marketplace. Top brands use access language, not transactional verbs.": "كلمة access تعني وصولًا منسقًا قائمًا على العلاقة. أما booking فتشبه السوق المفتوح. العلامات الأعلى تستخدم لغة الوصول لا لغة المعاملة.",
+  "Pattern 07": "النمط 07",
+  "Bespoke Over Packages": "التصميم الخاص بدل الباقات",
+  "No fixed menus. No package pages. The language is tailored, curated, and designed around you: the opposite of catalog-based selling.": "لا قوائم ثابتة ولا صفحات باقات. اللغة تدور حول tailoring وcuration والتصميم حول العميل، بعكس البيع من كتالوج.",
+  "Pattern 08": "النمط 08",
+  "Global Partner Networks": "شبكات شركاء عالمية",
+  "No single company does everything. The strongest brands partner deeply, creating the impression of unlimited capability through trusted relationships.": "لا توجد شركة تفعل كل شيء وحدها. العلامات الأقوى تبني شبكة شركاء عميقة تعطي انطباع القدرة اللامحدودة عبر علاقات موثوقة.",
+  "Pattern 09": "النمط 09",
+  "Family Office Thinking": "تفكير يشبه مكاتب العائلات",
+  "The best UHNW brands think like family offices: multi-generational, comprehensive, and proactive. They manage wealth of time, not just wealth of money.": "أفضل علامات UHNW تفكر مثل Family Offices: شمولية، استمرارية، واستباقية. هي لا تدير المال فقط، بل تدير ثروة الوقت.",
+  "What WOSOL Can Learn": "ما الذي يمكن أن تتعلمه WOSOL",
+  "Strategic opportunity map": "خريطة فرص استراتيجية",
+  "Build a Private Access Network": "بناء شبكة وصول خاصة",
+  "Partner with vetted aviation, yacht, hotel, dining, and event providers, creating the impression of unlimited access without owning any assets.": "بناء شراكات مع مزودي طيران ويخوت وفنادق ومطاعم وفعاليات بعد التحقق منهم، لخلق قدرة وصول واسعة دون امتلاك الأصول.",
+  "Create Saudi Aviation Partnerships": "تأسيس شراكات طيران سعودية",
+  "Form preferred-partner agreements with NasJet, Alpha Star, and Saudia Private. Aviation access is non-negotiable for WOSOL Premier and Imperial clients.": "تأسيس اتفاقيات شريك مفضل مع NasJet و Alpha Star و Saudia Private. الوصول للطيران الخاص عنصر أساسي لعملاء Premier و Imperial.",
+  "Add UHNW Request Protocols": "إضافة بروتوكولات طلبات UHNW",
+  "Define a clear protocol for extraordinary requests, the kind Knightsbridge Circle and Sienna Charles are known for. Train Lifestyle Managers on impossible request management.": "وضع بروتوكول واضح للطلبات غير الاعتيادية، من النوع الذي تشتهر به Knightsbridge Circle و Sienna Charles، وتدريب Lifestyle Managers على إدارة الطلبات المعقدة.",
+  "Membership-Based Access Only": "الوصول عبر العضوية فقط",
+  "Never build a public service catalog. Every service is accessed through membership. Assessment precedes access. This separates WOSOL from booking platforms.": "عدم بناء كتالوج خدمات عام. كل خدمة تمر عبر العضوية، والتقييم يسبق الوصول. هذا ما يفصل WOSOL عن منصات الحجز.",
+  "Build Client Intelligence Profiles": "بناء ملفات ذكاء للعميل",
+  "Like VistaJet's Private Office tracks preferences, WOSOL's app should build a growing profile, turning every interaction into a data point for proactive service.": "كما يتتبع Private Office لدى VistaJet تفضيلات العميل، يجب أن يبني تطبيق WOSOL ملفًا متناميًا يحول كل تفاعل إلى إشارة لخدمة استباقية.",
+  "Lifestyle Assessment First": "تقييم أسلوب الحياة أولًا",
+  "Before recommending a membership tier, conduct a Lifestyle Assessment. This is standard in top-tier financial services and concierge, and signals sophistication.": "قبل اقتراح مستوى العضوية، يبدأ المسار بتقييم أسلوب الحياة. هذا معيار مألوف في الخدمات المالية والكونسيرج الراقية ويعكس نضج الخدمة.",
+  "Develop Yacht Access for Imperial": "تطوير وصول اليخوت لعضوية Imperial",
+  "Partner with Burgess, Fraser, or Edmiston for superyacht access. Yacht experiences are a natural extension for WOSOL's Saudi royal and estate-level clients.": "بناء شراكات مع Burgess أو Fraser أو Edmiston للوصول إلى اليخوت الفاخرة. تجارب اليخوت امتداد طبيعي لعملاء WOSOL من المستوى الملكي وإدارة الأملاك.",
+  "Create By Request Services": "تفعيل خدمات عند الطلب فقط",
+  "Some services should not be listed. They should only be available upon request to create mystique and prevent commoditization of WOSOL's highest-value offerings.": "بعض الخدمات لا ينبغي أن تُعرض علنًا. توفرها عند الطلب فقط يحافظ على الندرة ويمنع تحويل أعلى عروض WOSOL إلى خدمات عادية.",
+  "Position as a Trusted Access Partner": "التموضع كشريك وصول موثوق",
+  "Not a concierge. Not a booking service. A trusted access partner, like a Chief of Staff for life. This reframe changes the pricing conversation entirely.": "ليست كونسيرج فقط وليست خدمة حجز. WOSOL يجب أن تتموضع كشريك وصول موثوق، أقرب إلى Chief of Staff للحياة الخاصة. هذا يعيد تعريف القيمة والسعر.",
+  "GCC-First, Globally Capable": "خليجي الجذور، عالمي القدرة",
+  "Lead with deep Saudi and GCC market expertise: cultural, linguistic, and protocol knowledge that global brands cannot replicate. Expand globally through partner networks.": "الانطلاق من فهم عميق للسعودية والخليج: ثقافة، لغة، وبروتوكول لا تستطيع العلامات العالمية نسخه بسهولة، مع التوسع عالميًا عبر شبكة شركاء.",
+  "Service Mapping for WOSOL": "مواءمة الخدمات مع WOSOL",
+  "Global categories into local operating ideas": "تحويل التصنيفات العالمية إلى أفكار تشغيل محلية",
+  "Global Service Category": "تصنيف الخدمة عالميًا",
+  "Example Providers": "أمثلة مزودين",
+  "How WOSOL Can Adapt It": "كيف يمكن لـ WOSOL تكييفها",
+  "Private Jet Charter": "استئجار الطائرات الخاصة",
+  "Partner-based aviation request handling for all membership tiers. No fleet ownership required.": "إدارة طلبات الطيران عبر شركاء موثوقين لكل مستويات العضوية، دون الحاجة لامتلاك أسطول.",
+  "Private Jet Experience": "تجربة الطيران الخاص",
+  "Ground concierge coordination: private terminals, transfers, and journey preparation as a WOSOL service layer.": "تنسيق كونسيرج أرضي يشمل الصالات الخاصة، التنقلات، وتجهيز الرحلة كطبقة خدمة من WOSOL.",
+  "Superyacht Charter": "استئجار اليخوت الفاخرة",
+  "Curated access to yacht experiences via vetted broker partnerships. Red Sea and Mediterranean initially.": "وصول منسق لتجارب اليخوت عبر وسطاء موثوقين، مع البدء بالبحر الأحمر والمتوسط.",
+  "Yacht Management": "إدارة اليخوت",
+  "Estate-level yacht management coordination for Black tier clients who own yachts.": "تنسيق إدارة اليخوت لعملاء Black الذين يمتلكون يخوتًا ضمن منطق إدارة الأملاك.",
+  "Lifestyle Concierge": "كونسيرج أسلوب الحياة",
+  "Core membership model. Dedicated Lifestyle Manager. A-Z lifestyle management. WOSOL Premier direct equivalent.": "نموذج العضوية الأساسي: Lifestyle Manager مخصص وإدارة شاملة لأسلوب الحياة، وهو أقرب نموذج لـ WOSOL Premier.",
+  "WOSOL Journeys sub-brand: bespoke journey design through trusted travel design partners.": "علامة فرعية باسم WOSOL Journeys لتصميم رحلات خاصة عبر شركاء سفر موثوقين.",
+  "Private Members Clubs": "النوادي الخاصة",
+  "Reciprocal access: WOSOL members gain access to global private clubs through partner relationships.": "وصول تبادلي يمنح أعضاء WOSOL دخولًا إلى نوادٍ خاصة عالمية عبر علاقات شراكة.",
+  "Corporate Concierge": "كونسيرج الشركات",
+  "B2B revenue: WOSOL corporate membership for Saudi companies to offer to their VIP clients.": "إيراد B2B عبر عضوية WOSOL للشركات السعودية لتقديمها لعملائها المهمين.",
+  "UHNW Community": "مجتمع UHNW",
+  "Member events: curated WOSOL member events to build belonging and community beyond service delivery.": "فعاليات أعضاء مصممة لبناء الانتماء والمجتمع، بما يتجاوز تقديم الخدمة فقط.",
+  "Membership Implications": "انعكاسات ذلك على العضويات",
+  "How research can shape WOSOL tiers": "كيف يشكل البحث مستويات WOSOL",
+  "Individual Lifestyle Management": "إدارة أسلوب حياة فردية",
+  "Inspired by Quintessentially, Ten Lifestyle, and Sienna Charles. Dedicated Lifestyle Manager with proactive intelligence.": "مستوحاة من Quintessentially و Ten Lifestyle و Sienna Charles: مدير أسلوب حياة مخصص مع ذكاء استباقي.",
+  "Estate & Family Coordination": "تنسيق الأسرة والأملاك",
+  "Inspired by Quintessentially Estates, Hill Robinson yacht management, and Scott Dunn family travel. Private Estate Operating System for up to 10 named users.": "مستوحاة من Quintessentially Estates و Hill Robinson و Scott Dunn: نظام تشغيل خاص للأسرة والأملاك حتى 10 مستخدمين محددين.",
+  "Royal Protocol & Absolute Discretion": "بروتوكول ملكي وخصوصية مطلقة",
+  "Inspired by Knightsbridge Circle, Royal Jet, and Burgess superyacht services. 1:1 or 1:2 dedicated support. Zero digital footprint.": "مستوحاة من Knightsbridge Circle و Royal Jet و Burgess: دعم مخصص 1:1 أو 1:2 مع أثر رقمي شبه معدوم.",
+  "B2B & Institutional Access": "وصول مؤسسي و B2B",
+  "Inspired by John Paul, Aspire Lifestyles, and Ten Lifestyle's banking partnerships. WOSOL as a white-label lifestyle partner for Saudi corporations.": "مستوحاة من John Paul و Aspire Lifestyles وشراكات Ten Lifestyle البنكية: WOSOL كشريك أسلوب حياة بعلامة بيضاء للشركات السعودية.",
+  "Research Sources": "مصادر البحث",
+  "Public source links used for the directory": "روابط المصادر العامة المستخدمة في الدليل",
+  "View company source links": "عرض روابط مصادر الشركات",
+  "Final Recommendation Layer": "طبقة التوصية النهائية",
+  "This directory is designed as a reference layer for partnership mapping, membership development, and UHNW service positioning.": "صُمم هذا الدليل كطبقة مرجعية لرسم خريطة الشراكات، وتطوير العضويات، وتموضع خدمات UHNW.",
+  "It should be used to study positioning, access models, service language, and partner categories before WOSOL makes commercial or operating decisions.": "يُستخدم هذا المرجع لدراسة التموضع، ونماذج الوصول، ولغة الخدمة، وتصنيفات الشركاء قبل اتخاذ قرارات تجارية أو تشغيلية داخل WOSOL.",
+  "Prepared for Executive Review - Public sources only - 2026": "أُعد للمراجعة التنفيذية - مصادر عامة فقط - 2026",
+  "Close": "إغلاق",
+  "Top": "أعلى"
+};
+
+const staticEnglish = Object.fromEntries(
+  Object.entries(staticArabic).map(([english, arabic]) => [normalizeText(arabic), english])
+);
+
+function normalizeText(value) {
+  return value.replace(/\s+/g, " ").trim();
+}
+
+function t(key) {
+  return uiText[currentLanguage][key] || uiText.en[key] || key;
+}
+
+function localizeCategory(value) {
+  return currentLanguage === "ar" ? categoryLabelsAr[value] || value : value;
+}
+
+function translateTextNodes() {
+  const map = currentLanguage === "ar" ? staticArabic : staticEnglish;
+  const walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, {
+    acceptNode(node) {
+      const parent = node.parentElement;
+      if (!parent || ["SCRIPT", "STYLE"].includes(parent.tagName)) return NodeFilter.FILTER_REJECT;
+      if (!normalizeText(node.nodeValue)) return NodeFilter.FILTER_REJECT;
+      return NodeFilter.FILTER_ACCEPT;
+    }
+  });
+
+  const nodes = [];
+  while (walker.nextNode()) nodes.push(walker.currentNode);
+
+  nodes.forEach((node) => {
+    const normalized = normalizeText(node.nodeValue);
+    const replacement = map[normalized];
+    if (!replacement) return;
+    const leading = node.nodeValue.match(/^\s*/)[0];
+    const trailing = node.nodeValue.match(/\s*$/)[0];
+    node.nodeValue = `${leading}${replacement}${trailing}`;
+  });
+}
+
+function applyRichTranslations() {
+  const summaryParagraphs = document.querySelectorAll(".exec-summary p");
+  if (summaryParagraphs[0]) {
+    summaryParagraphs[0].innerHTML = currentLanguage === "ar"
+      ? 'عملاء UHNW لا يشترون خدمة منفصلة؛ هم يشترون <strong>وصولًا موثوقًا، خصوصية، وقتًا، يقينًا، وتحفظًا مهنيًا</strong>. الطيران الخاص واليخوت الفاخرة ليست فئات رفاهية فقط، بل بنية تشغيلية لحياة المؤسسين ومكاتب العائلات وكبار التنفيذيين والعملاء الخاصين. هذا الدليل يساعد WOSOL على فهم كيف تُبنى خدمات الوصول عالميًا من حيث التغليف، الحوكمة، التسعير، ولغة العرض، دون نسخ أي مزود بعينه.'
+      : 'UHNW clients do not simply buy services. They buy <strong>access, privacy, time, certainty, and trusted discretion</strong>. Private aviation and superyachts are not only luxury categories; they operate as lifestyle infrastructure for founders, family offices, senior executives, and private clients. This directory is designed to help WOSOL study how global luxury access is packaged, governed, priced, and communicated without copying any one provider.';
+  }
+
+  if (summaryParagraphs[1]) {
+    summaryParagraphs[1].setAttribute("dir", currentLanguage === "ar" ? "rtl" : "ltr");
+    summaryParagraphs[1].setAttribute("lang", currentLanguage === "ar" ? "ar" : "en");
+    summaryParagraphs[1].textContent = currentLanguage === "ar"
+      ? "الهدف العملي من هذا المرجع هو تحويل الملاحظات العالمية إلى عضويات، شراكات، وبروتوكولات خدمة تناسب WOSOL Concierge في السوق السعودي والخليجي، مع قدرة تنفيذ عالمية عبر شركاء موثوقين."
+      : "This reference layer converts global luxury-access patterns into membership logic, partner strategy, and operating protocols that WOSOL Concierge can adapt for Saudi and GCC clients.";
+  }
+}
+
+function applyLanguage(render = true) {
+  document.documentElement.lang = currentLanguage === "ar" ? "ar" : "en";
+  document.documentElement.dir = currentLanguage === "ar" ? "rtl" : "ltr";
+  document.title = t("pageTitle");
+
+  const description = document.querySelector('meta[name="description"]');
+  const ogTitle = document.querySelector('meta[property="og:title"]');
+  const ogDescription = document.querySelector('meta[property="og:description"]');
+  if (description) description.setAttribute("content", t("pageDescription"));
+  if (ogTitle) ogTitle.setAttribute("content", currentLanguage === "ar" ? "دليل الوصول الفاخر لعملاء UHNW" : "Global UHNW Luxury Access Directory");
+  if (ogDescription) ogDescription.setAttribute("content", t("pageDescription"));
+
+  languageToggle.textContent = currentLanguage === "ar" ? "EN" : "AR";
+  languageToggle.setAttribute("aria-label", t("switchLanguage"));
+  searchInput.setAttribute("placeholder", t("searchPlaceholder"));
+  backToTop.textContent = t("top");
+  backToTop.setAttribute("aria-label", currentLanguage === "ar" ? "العودة إلى أعلى الصفحة" : "Back to top");
+
+  translateTextNodes();
+  applyRichTranslations();
+
+  if (render) {
+    renderCompanyCards();
+    renderComparisonTable();
+    renderSources();
+    if (modal.classList.contains("active") && activeCompanySlug) {
+      openCompany(activeCompanySlug, false);
+    }
+  }
+}
+
+function toggleLanguage() {
+  currentLanguage = currentLanguage === "ar" ? "en" : "ar";
+  localStorage.setItem("wosolLanguage", currentLanguage);
+  applyLanguage(true);
+}
 
 function slugify(value) {
   return value
@@ -2257,10 +2561,10 @@ function visibleCompanies() {
 
 function renderCompanyCards() {
   const visible = visibleCompanies();
-  resultCount.textContent = `Showing ${visible.length} of ${companies.length} companies`;
+  resultCount.textContent = t("resultCount")(visible.length, companies.length);
 
   if (!visible.length) {
-    companyGrid.innerHTML = `<div class="empty-state">No companies match the current filter. Clear the search or choose All.</div>`;
+    companyGrid.innerHTML = `<div class="empty-state">${t("emptyState")}</div>`;
     return;
   }
 
@@ -2268,18 +2572,18 @@ function renderCompanyCards() {
     const slug = slugify(company.name);
     return `
       <article class="company-card" id="company-${slug}">
-        <span class="category-badge">${company.category}</span>
-        <span class="region-pill">${company.region}</span>
-        <h3>${company.name}</h3>
-        <p>${company.summary}</p>
+        <span class="category-badge">${localizeCategory(company.category)}</span>
+        <span class="region-pill provider-copy">${company.region}</span>
+        <h3 class="provider-name">${company.name}</h3>
+        <p class="provider-copy">${company.summary}</p>
         <div class="company-meta">
-          <span><strong>Services:</strong> ${company.services.slice(0, 3).join(", ")}</span>
-          <span><strong>Target:</strong> ${company.target}</span>
-          <span><strong>WOSOL relevance:</strong> ${company.relevance}</span>
+          <span><strong>${t("services")}:</strong> <span class="provider-copy">${company.services.slice(0, 3).join(", ")}</span></span>
+          <span><strong>${t("target")}:</strong> <span class="provider-copy">${company.target}</span></span>
+          <span><strong>${t("relevance")}:</strong> <span class="provider-copy">${company.relevance}</span></span>
         </div>
         <div class="company-actions">
-          <a href="${company.url}" target="_blank" rel="noopener">Website</a>
-          <button type="button" data-company="${slug}">View Details</button>
+          <a href="${company.url}" target="_blank" rel="noopener">${t("website")}</a>
+          <button type="button" data-company="${slug}">${t("viewDetails")}</button>
         </div>
       </article>
     `;
@@ -2300,13 +2604,13 @@ function renderComparisonTable() {
   comparisonBody.innerHTML = sorted.map((company) => `
     <tr>
       <td>${company.name}</td>
-      <td>${company.category}</td>
+      <td>${localizeCategory(company.category)}</td>
       <td>${company.region}</td>
       <td>${company.serviceType}</td>
       <td>${company.membership}</td>
       <td>${company.target}</td>
       <td>${company.relevance}</td>
-      <td><a href="${company.url}" target="_blank" rel="noopener">Open</a></td>
+      <td><a href="${company.url}" target="_blank" rel="noopener">${t("open")}</a></td>
     </tr>
   `).join("");
 }
@@ -2315,7 +2619,7 @@ function renderSources() {
   sourcesList.innerHTML = companies.map((company) => `
     <div class="source-item">
       <strong>${company.name}</strong>
-      <span>${company.category}</span>
+      <span>${localizeCategory(company.category)}</span>
       <a href="${company.source}" target="_blank" rel="noopener">${company.source}</a>
     </div>
   `).join("");
@@ -2324,36 +2628,37 @@ function renderSources() {
 function openCompany(slug, updateHash = false) {
   const company = companies.find((item) => slugify(item.name) === slug);
   if (!company) return;
+  activeCompanySlug = slug;
 
   if (updateHash) {
     history.replaceState(null, "", `#company-${slug}`);
   }
 
   modalContent.innerHTML = `
-    <span class="category-badge">${company.category}</span>
-    <h2 class="modal-title" id="modalTitle">${company.name}</h2>
-    <p class="modal-subtitle">${company.positioning}</p>
+    <span class="category-badge">${localizeCategory(company.category)}</span>
+    <h2 class="modal-title provider-name" id="modalTitle">${company.name}</h2>
+    <p class="modal-subtitle provider-copy">${company.positioning}</p>
     <div class="detail-grid">
-      <div class="detail-cell"><strong>Region</strong><span>${company.region}</span></div>
-      <div class="detail-cell"><strong>Service Type</strong><span>${company.serviceType}</span></div>
-      <div class="detail-cell"><strong>Target Segment</strong><span>${company.target}</span></div>
-      <div class="detail-cell"><strong>Membership / Access</strong><span>${company.membership}</span></div>
+      <div class="detail-cell"><strong>${t("region")}</strong><span class="provider-copy">${company.region}</span></div>
+      <div class="detail-cell"><strong>${t("serviceType")}</strong><span class="provider-copy">${company.serviceType}</span></div>
+      <div class="detail-cell"><strong>${t("targetSegment")}</strong><span class="provider-copy">${company.target}</span></div>
+      <div class="detail-cell"><strong>${t("membershipAccess")}</strong><span class="provider-copy">${company.membership}</span></div>
     </div>
     <div class="modal-body">
-      <h3>Executive Summary</h3>
-      <p>${company.summary}</p>
-      <h3>Public Services Listed</h3>
-      <ul>${company.services.map((service) => `<li>${service}</li>`).join("")}</ul>
-      <h3>What makes it relevant to WOSOL</h3>
-      <p>${company.relevance}</p>
-      <h3>Strategic lesson for WOSOL</h3>
-      <p>${company.lesson}</p>
-      <h3>Source Link</h3>
-      <p><a href="${company.source}" target="_blank" rel="noopener">${company.source}</a></p>
+      <h3>${t("executiveSummary")}</h3>
+      <p class="provider-copy">${company.summary}</p>
+      <h3>${t("publicServices")}</h3>
+      <ul class="provider-copy">${company.services.map((service) => `<li>${service}</li>`).join("")}</ul>
+      <h3>${t("relevantToWosol")}</h3>
+      <p class="provider-copy">${company.relevance}</p>
+      <h3>${t("strategicLesson")}</h3>
+      <p class="provider-copy">${company.lesson}</p>
+      <h3>${t("sourceLink")}</h3>
+      <p class="provider-copy"><a href="${company.source}" target="_blank" rel="noopener">${company.source}</a></p>
     </div>
     <div class="modal-actions">
-      <a href="${company.url}" target="_blank" rel="noopener">Visit Website</a>
-      <button type="button" data-copy-link="${slug}">Copy Company Link</button>
+      <a href="${company.url}" target="_blank" rel="noopener">${t("visitWebsite")}</a>
+      <button type="button" data-copy-link="${slug}">${t("copyCompanyLink")}</button>
     </div>
   `;
 
@@ -2368,6 +2673,7 @@ function closeModal() {
   modal.classList.remove("active");
   modal.setAttribute("aria-hidden", "true");
   document.body.style.overflow = "";
+  activeCompanySlug = null;
 }
 
 function copyCompanyLink(slug) {
@@ -2398,6 +2704,8 @@ function applyFilter(filter) {
 }
 
 function initEvents() {
+  languageToggle.addEventListener("click", toggleLanguage);
+
   document.querySelectorAll(".filter-btn").forEach((button) => {
     button.addEventListener("click", () => applyFilter(button.dataset.filter));
   });
@@ -2448,6 +2756,7 @@ function openFromHash() {
 
 function init() {
   totalCompanies.textContent = companies.length;
+  applyLanguage(false);
   renderCompanyCards();
   renderComparisonTable();
   renderSources();
