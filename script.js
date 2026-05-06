@@ -2431,8 +2431,6 @@ function initEvents() {
     if (event.key === "Escape") closeModal();
   });
 
-  document.getElementById("printBtn").addEventListener("click", () => window.print());
-
   backToTop.addEventListener("click", () => {
     window.scrollTo({ top: 0, behavior: "smooth" });
   });
