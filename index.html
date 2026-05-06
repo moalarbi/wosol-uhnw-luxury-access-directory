@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Global UHNW Luxury Access Directory | WOSOL Concierge</title>
+  <meta name="description" content="A premium WOSOL research hub mapping global UHNW luxury access providers across private aviation, superyachts, concierge, bespoke travel, private clubs, and GCC services." />
+  <meta property="og:title" content="Global UHNW Luxury Access Directory" />
+  <meta property="og:description" content="A strategic research hub for private aviation, superyachts, luxury concierge, and bespoke lifestyle services." />
+  <meta property="og:type" content="website" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="pattern-bg" aria-hidden="true"></div>
+
+  <div class="page-wrapper">
+    <header class="site-header" id="top">
+      <div class="header-meta en">Internal Research Hub - Confidential - 2026</div>
+      <a class="logo-block" href="#top" aria-label="WOSOL Concierge home">
+        <span class="logo-name">WOSOL</span>
+        <span class="logo-sub">CONCIERGE</span>
+      </a>
+    </header>
+
+    <nav class="quick-nav" aria-label="Page navigation">
+      <a href="#directory">Directory</a>
+      <a href="#comparison">Comparison</a>
+      <a href="#patterns">Patterns</a>
+      <a href="#wosol">WOSOL Insights</a>
+      <a href="#sources">Sources</a>
+      <button type="button" id="printBtn">Print / Export PDF</button>
+    </nav>
+
+    <main>
+      <section class="hero-section" aria-labelledby="pageTitle">
+        <span class="doc-label en">UHNW Access Research Layer</span>
+        <h1 class="page-title" id="pageTitle">Global UHNW Luxury Access Directory</h1>
+        <p class="page-title-en">A strategic research hub for private aviation, superyachts, luxury concierge, and bespoke lifestyle services.</p>
+        <div class="hero-badges" aria-label="Research categories">
+          <span>Private Aviation</span>
+          <span>Superyachts</span>
+          <span>Lifestyle Management</span>
+          <span>Bespoke Travel</span>
+          <span>UHNW Access</span>
+        </div>
+        <div class="hero-actions">
+          <a class="cta-btn primary" href="#directory">Explore Companies</a>
+          <a class="cta-btn" href="#filters">View by Category</a>
+          <a class="cta-btn" href="#wosol">WOSOL Strategic Insights</a>
+        </div>
+      </section>
+
+      <section class="exec-summary" aria-labelledby="summaryTitle">
+        <span class="exec-label en" id="summaryTitle">Executive Summary</span>
+        <p>
+          UHNW clients do not simply buy services. They buy <strong>access, privacy, time, certainty, and trusted discretion</strong>.
+          Private aviation and superyachts are not only luxury categories; they operate as lifestyle infrastructure for founders,
+          family offices, senior executives, and private clients. This directory is designed to help WOSOL study how global luxury
+          access is packaged, governed, priced, and communicated without copying any one provider.
+        </p>
+        <p class="arabic-note" dir="rtl" lang="ar">
+          الملخص الاستراتيجي: الهدف من هذا المرجع هو فهم طريقة بناء خدمات الوصول الفاخر عالمياً، ثم تحويل الدروس إلى عضويات وشراكات وبروتوكولات خدمة تناسب WOSOL Concierge.
+        </p>
+      </section>
+
+      <section class="section stats-section" aria-label="Directory metrics">
+        <div class="metrics-grid">
+          <div class="metric-cell">
+            <span class="metric-num" id="totalCompanies">0</span>
+            <span class="metric-label">Companies Mapped</span>
+          </div>
+          <div class="metric-cell">
+            <span class="metric-num">6</span>
+            <span class="metric-label">Research Categories</span>
+          </div>
+          <div class="metric-cell">
+            <span class="metric-num">GCC</span>
+            <span class="metric-label">Saudi-Relevant Layer</span>
+          </div>
+          <div class="metric-cell">
+            <span class="metric-num">Public</span>
+            <span class="metric-label">Sources Only</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="directory">
+        <div class="section-header">
+          <span class="section-num en">01</span>
+          <div>
+            <h2 class="section-title">Company Directory</h2>
+            <p class="section-title-en">Filterable research cards</p>
+          </div>
+        </div>
+
+        <div class="section-body">
+          <div class="controls-panel" id="filters">
+            <label class="search-label" for="searchInput">Search by company, service, region, or WOSOL relevance</label>
+            <div class="search-row">
+              <input id="searchInput" type="search" placeholder="Search NetJets, yacht charter, Saudi, family office..." autocomplete="off" />
+              <button type="button" id="clearSearch">Clear</button>
+            </div>
+            <div class="filter-buttons" role="group" aria-label="Category filters">
+              <button type="button" class="filter-btn active" data-filter="All">All</button>
+              <button type="button" class="filter-btn" data-filter="Private Jets">Private Jets</button>
+              <button type="button" class="filter-btn" data-filter="Private Yachts">Private Yachts</button>
+              <button type="button" class="filter-btn" data-filter="Luxury Concierge">Luxury Concierge</button>
+              <button type="button" class="filter-btn" data-filter="Bespoke Travel">Bespoke Travel</button>
+              <button type="button" class="filter-btn" data-filter="Private Clubs">Private Clubs</button>
+              <button type="button" class="filter-btn" data-filter="GCC / Saudi Relevant">GCC / Saudi Relevant</button>
+            </div>
+            <p class="result-count en" id="resultCount" aria-live="polite">Showing 0 companies</p>
+          </div>
+
+          <div class="company-grid" id="companyGrid" aria-live="polite"></div>
+        </div>
+      </section>
+
+      <section class="section" id="comparison">
+        <div class="section-header">
+          <span class="section-num en">02</span>
+          <div>
+            <h2 class="section-title">Comparison Table</h2>
+            <p class="section-title-en">Sortable provider intelligence</p>
+          </div>
+        </div>
+        <div class="section-body">
+          <div class="table-note">
+            Click a column heading to sort. Use the filters above to narrow the company cards; the comparison table remains a full reference layer.
+          </div>
+          <div class="compare-scroll">
+            <table class="compare-table">
+              <thead>
+                <tr>
+                  <th><button type="button" data-sort="name">Company</button></th>
+                  <th><button type="button" data-sort="category">Category</button></th>
+                  <th><button type="button" data-sort="region">Region</button></th>
+                  <th><button type="button" data-sort="serviceType">Service Type</button></th>
+                  <th><button type="button" data-sort="membership">Membership / Access Model</button></th>
+                  <th><button type="button" data-sort="target">Target Segment</button></th>
+                  <th><button type="button" data-sort="relevance">WOSOL Relevance</button></th>
+                  <th>Website</th>
+                </tr>
+              </thead>
+              <tbody id="comparisonBody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="patterns">
+        <div class="section-header">
+          <span class="section-num en">03</span>
+          <div>
+            <h2 class="section-title">Strategic Patterns</h2>
+            <p class="section-title-en">Signals across global luxury access providers</p>
+          </div>
+        </div>
+        <div class="section-body pattern-grid">
+          <article class="insight-card featured">
+            <span class="card-num en">Pattern 01</span>
+            <h3>Invitation-Only Positioning</h3>
+            <p>The highest-tier providers, including Knightsbridge Circle, CORE Club, and R360, never publish how to join. The mystery of access is itself a product.</p>
+          </article>
+          <article class="insight-card">
+            <span class="card-num en">Pattern 02</span>
+            <h3>Membership Over Booking</h3>
+            <p>VistaJet, Wheels Up, and Ten Lifestyle all repackage service delivery into membership language. Member implies relationship; customer implies transaction.</p>
+          </article>
+          <article class="insight-card">
+            <span class="card-num en">Pattern 03</span>
+            <h3>Dedicated Advisors</h3>
+            <p>Every major concierge brand centers its offer around a dedicated human: Quintessentially's Lifestyle Manager, VistaJet's Private Office, and NetJets' Account Manager.</p>
+          </article>
+          <article class="insight-card">
+            <span class="card-num en">Pattern 04</span>
+            <h3>Aviation & Yachts as Infrastructure</h3>
+            <p>Private aviation and superyachts are not services. They are infrastructure. The best brands treat them as utilities for UHNW lifestyles, not aspirational bookings.</p>
+          </article>
+          <article class="insight-card">
+            <span class="card-num en">Pattern 05</span>
+            <h3>Discretion Language</h3>
+            <p>Discreet, private, confidential, and zero-footprint vocabulary signals trust. Brands that lead with discretion capture UHNW clients others cannot reach.</p>
+          </article>
+          <article class="insight-card">
+            <span class="card-num en">Pattern 06</span>
+            <h3>Access Instead of Booking</h3>
+            <p>Access implies curated, relationship-based delivery. Booking implies a marketplace. Top brands use access language, not transactional verbs.</p>
+          </article>
+          <article class="insight-card">
+            <span class="card-num en">Pattern 07</span>
+            <h3>Bespoke Over Packages</h3>
+            <p>No fixed menus. No package pages. The language is tailored, curated, and designed around you: the opposite of catalog-based selling.</p>
+          </article>
+          <article class="insight-card">
+            <span class="card-num en">Pattern 08</span>
+            <h3>Global Partner Networks</h3>
+            <p>No single company does everything. The strongest brands partner deeply, creating the impression of unlimited capability through trusted relationships.</p>
+          </article>
+          <article class="insight-card">
+            <span class="card-num en">Pattern 09</span>
+            <h3>Family Office Thinking</h3>
+            <p>The best UHNW brands think like family offices: multi-generational, comprehensive, and proactive. They manage wealth of time, not just wealth of money.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="wosol">
+        <div class="section-header">
+          <span class="section-num en">04</span>
+          <div>
+            <h2 class="section-title">What WOSOL Can Learn</h2>
+            <p class="section-title-en">Strategic opportunity map</p>
+          </div>
+        </div>
+        <div class="section-body">
+          <div class="opportunity-list">
+            <div>
+              <h3>Build a Private Access Network</h3>
+              <p>Partner with vetted aviation, yacht, hotel, dining, and event providers, creating the impression of unlimited access without owning any assets.</p>
+            </div>
+            <div>
+              <h3>Create Saudi Aviation Partnerships</h3>
+              <p>Form preferred-partner agreements with NasJet, Alpha Star, and Saudia Private. Aviation access is non-negotiable for WOSOL Premier and Imperial clients.</p>
+            </div>
+            <div>
+              <h3>Add UHNW Request Protocols</h3>
+              <p>Define a clear protocol for extraordinary requests, the kind Knightsbridge Circle and Sienna Charles are known for. Train Lifestyle Managers on impossible request management.</p>
+            </div>
+            <div>
+              <h3>Membership-Based Access Only</h3>
+              <p>Never build a public service catalog. Every service is accessed through membership. Assessment precedes access. This separates WOSOL from booking platforms.</p>
+            </div>
+            <div>
+              <h3>Build Client Intelligence Profiles</h3>
+              <p>Like VistaJet's Private Office tracks preferences, WOSOL's app should build a growing profile, turning every interaction into a data point for proactive service.</p>
+            </div>
+            <div>
+              <h3>Lifestyle Assessment First</h3>
+              <p>Before recommending a membership tier, conduct a Lifestyle Assessment. This is standard in top-tier financial services and concierge, and signals sophistication.</p>
+            </div>
+            <div>
+              <h3>Develop Yacht Access for Imperial</h3>
+              <p>Partner with Burgess, Fraser, or Edmiston for superyacht access. Yacht experiences are a natural extension for WOSOL's Saudi royal and estate-level clients.</p>
+            </div>
+            <div>
+              <h3>Create By Request Services</h3>
+              <p>Some services should not be listed. They should only be available upon request to create mystique and prevent commoditization of WOSOL's highest-value offerings.</p>
+            </div>
+            <div>
+              <h3>Position as a Trusted Access Partner</h3>
+              <p>Not a concierge. Not a booking service. A trusted access partner, like a Chief of Staff for life. This reframe changes the pricing conversation entirely.</p>
+            </div>
+            <div>
+              <h3>GCC-First, Globally Capable</h3>
+              <p>Lead with deep Saudi and GCC market expertise: cultural, linguistic, and protocol knowledge that global brands cannot replicate. Expand globally through partner networks.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <span class="section-num en">05</span>
+          <div>
+            <h2 class="section-title">Service Mapping for WOSOL</h2>
+            <p class="section-title-en">Global categories into local operating ideas</p>
+          </div>
+        </div>
+        <div class="section-body">
+          <div class="compare-scroll">
+            <table>
+              <thead>
+                <tr>
+                  <th>Global Service Category</th>
+                  <th>Example Providers</th>
+                  <th>How WOSOL Can Adapt It</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Private Jet Charter</td>
+                  <td>NetJets, VistaJet, Royal Jet, NasJet</td>
+                  <td>Partner-based aviation request handling for all membership tiers. No fleet ownership required.</td>
+                </tr>
+                <tr>
+                  <td>Private Jet Experience</td>
+                  <td>Jetex FBO, ExecuJet, DC Aviation</td>
+                  <td>Ground concierge coordination: private terminals, transfers, and journey preparation as a WOSOL service layer.</td>
+                </tr>
+                <tr>
+                  <td>Superyacht Charter</td>
+                  <td>Burgess, Fraser, Edmiston</td>
+                  <td>Curated access to yacht experiences via vetted broker partnerships. Red Sea and Mediterranean initially.</td>
+                </tr>
+                <tr>
+                  <td>Yacht Management</td>
+                  <td>Hill Robinson, IYC</td>
+                  <td>Estate-level yacht management coordination for Black tier clients who own yachts.</td>
+                </tr>
+                <tr>
+                  <td>Lifestyle Concierge</td>
+                  <td>Quintessentially, Knightsbridge Circle, Ten</td>
+                  <td>Core membership model. Dedicated Lifestyle Manager. A-Z lifestyle management. WOSOL Premier direct equivalent.</td>
+                </tr>
+                <tr>
+                  <td>Bespoke Travel</td>
+                  <td>Black Tomato, Pelorus, Abercrombie & Kent</td>
+                  <td>WOSOL Journeys sub-brand: bespoke journey design through trusted travel design partners.</td>
+                </tr>
+                <tr>
+                  <td>Private Members Clubs</td>
+                  <td>CORE Club, R360, Annabel's</td>
+                  <td>Reciprocal access: WOSOL members gain access to global private clubs through partner relationships.</td>
+                </tr>
+                <tr>
+                  <td>Corporate Concierge</td>
+                  <td>John Paul, Aspire Lifestyles</td>
+                  <td>B2B revenue: WOSOL corporate membership for Saudi companies to offer to their VIP clients.</td>
+                </tr>
+                <tr>
+                  <td>UHNW Community</td>
+                  <td>R360, CORE Club</td>
+                  <td>Member events: curated WOSOL member events to build belonging and community beyond service delivery.</td>
+                </tr>
+                            </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-header">
+          <span class="section-num en">06</span>
+          <div>
+            <h2 class="section-title">Membership Implications</h2>
+            <p class="section-title-en">How research can shape WOSOL tiers</p>
+          </div>
+        </div>
+        <div class="section-body membership-grid">
+          <article>
+            <span class="card-num en">WOSOL Premier</span>
+            <h3>Individual Lifestyle Management</h3>
+            <p>Inspired by Quintessentially, Ten Lifestyle, and Sienna Charles. Dedicated Lifestyle Manager with proactive intelligence.</p>
+          </article>
+          <article>
+            <span class="card-num en">WOSOL Black</span>
+            <h3>Estate & Family Coordination</h3>
+            <p>Inspired by Quintessentially Estates, Hill Robinson yacht management, and Scott Dunn family travel. Private Estate Operating System for up to 10 named users.</p>
+          </article>
+          <article>
+            <span class="card-num en">WOSOL Imperial</span>
+            <h3>Royal Protocol & Absolute Discretion</h3>
+            <p>Inspired by Knightsbridge Circle, Royal Jet, and Burgess superyacht services. 1:1 or 1:2 dedicated support. Zero digital footprint.</p>
+          </article>
+          <article>
+            <span class="card-num en">Corporate Partnership</span>
+            <h3>B2B & Institutional Access</h3>
+            <p>Inspired by John Paul, Aspire Lifestyles, and Ten Lifestyle's banking partnerships. WOSOL as a white-label lifestyle partner for Saudi corporations.</p>
+          </article>
+        </div>
+      </section>
+
+      <section class="section" id="sources">
+        <div class="section-header">
+          <span class="section-num en">07</span>
+          <div>
+            <h2 class="section-title">Research Sources</h2>
+            <p class="section-title-en">Public source links used for the directory</p>
+          </div>
+        </div>
+        <div class="section-body">
+          <details class="sources-box" open>
+            <summary>View company source links</summary>
+            <div class="sources-grid" id="sourcesList"></div>
+          </details>
+        </div>
+      </section>
+
+      <section class="closing-section">
+        <span class="closing-label en">Final Recommendation Layer</span>
+        <h2>This directory is designed as a reference layer for partnership mapping, membership development, and UHNW service positioning.</h2>
+        <p>
+          It should be used to study positioning, access models, service language, and partner categories before WOSOL makes commercial or operating decisions.
+        </p>
+      </section>
+    </main>
+
+    <footer class="site-footer">
+      <div class="footer-logo">
+        <span class="logo-name">WOSOL</span>
+        <span class="logo-sub">CONCIERGE</span>
+      </div>
+      <div class="footer-meta en">Prepared for Executive Review - Public sources only - 2026</div>
+    </footer>
+  </div>
+
+  <div class="modal" id="companyModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="modalTitle">
+    <div class="modal-backdrop" data-close-modal></div>
+    <div class="modal-panel" role="document">
+      <button type="button" class="modal-close" data-close-modal aria-label="Close details">Close</button>
+      <div id="modalContent"></div>
+    </div>
+  </div>
+
+  <button class="back-to-top" id="backToTop" type="button" aria-label="Back to top">Top</button>
+
+  <script src="script.js"></script>
+</body>
+</html>
